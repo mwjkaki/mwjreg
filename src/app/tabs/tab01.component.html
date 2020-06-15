@@ -1,5 +1,63 @@
 <mat-card>
-  <mat-card-actions>
-    <button mat-flat-button (click)="con_Pg()" color="accent">読込</button>
-  </mat-card-actions>
+  <mat-card-subtitle>
+    <mat-toolbar>
+      <mat-card-actions>
+        <button mat-flat-button (click)="read_Data(headid)" color="accent">読込</button>
+      </mat-card-actions>
+    </mat-toolbar>
+  </mat-card-subtitle>
+  <mat-card-subtitle>
+    <mat-radio-group (change)="onChange()" [(ngModel)]="RDVAL" [ngModelOptions]="{standalone: true}">
+      <div fxLayout="row wrap" fxLayoutGap="20px"> 
+        <mat-radio-button value="1">新規</mat-radio-button>
+        <mat-radio-button value="2">続き/大会追加</mat-radio-button>
+      </div>
+    </mat-radio-group>
+  </mat-card-subtitle>
+  <mat-card-subtitle>
+    <div fxLayout="column"> 
+      <mat-checkbox (change)="onChange()" [(ngModel)]="chSHOP">店舗データ</mat-checkbox>
+      <mat-checkbox (change)="onChange()" [(ngModel)]="chCMPE">大会データ</mat-checkbox>
+    </div>
+  </mat-card-subtitle>
+  <mat-card-content>
+    <mat-select [placeholder]="placehold" [(value)]="headid">
+      <ng-container *ngFor="let hd of headerservice.getHeader()">
+        <mat-option value="{{ hd.headid }}">{{ hd.name }}　登録日時：{{ hd.created_at | date:"yy/MM/dd HH:mm" }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-card-content>
 </mat-card>
+<ng-container *ngIf="headid">
+  <mat-card>
+    <mat-card-subtitle>
+      <mat-toolbar>読込データ</mat-toolbar>
+    </mat-card-subtitle>
+    <form fxLayout="row wrap" fxLayoutGap="20px">
+      <mat-form-field style="width:400px">
+        <input matInput placeholder="データ名称" [(value)]="this.headerservice.header.name">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="データ作成日時" [value]="this.headerservice.header.created_at | date:'yy/MM/dd HH:mm'" disabled>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="登録ユーザ" [value]="this.headerservice.header.usr" disabled>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="読込時ステータス" [value]="this.headerservice.header.status" disabled>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="code" [value]="this.headerservice.header.code" disabled>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="通販Pro伝票番号" [value]="this.headerservice.header.denno" disabled>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="type" [value]="this.headerservice.header.type" disabled>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="headid" [value]="headid" disabled>
+      </mat-form-field>
+    </form>
+  </mat-card>
+</ng-container>

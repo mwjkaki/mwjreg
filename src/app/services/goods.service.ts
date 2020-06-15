@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export interface Ginfo {
   gcode: string;
   gname: string;
-  price: number[];
   stock: number;
+  price: number[];
 }
 
 export interface Goods {
@@ -16,54 +17,13 @@ export interface Goods {
   providedIn: 'root'
 })
 export class GoodsService {
-  public goods: Goods[]= [
-    {
-      categ: "ng",
-      ginfo: [
-        {
-          gcode: "test",
-          gname: "テスト",
-          price: [1000],
-          stock: 10,
-        },
-        {
-          gcode: "tes2",
-          gname: "テスト",
-          price: [1111],
-          stock: 20,
-        }
-        ,{
-          gcode: "test3",
-          gname: "テスト",
-          price: [1300],
-          stock: 10,
-        }
-      ]
-    },
-    {  categ: "lg2",
-    　　ginfo: [
-      {
-        gcode: "test",
-        gname: "テスト",
-        price: [1000],
-        stock: 10,
-      },
-      {
-        gcode: "tes2",
-        gname: "テスト",
-        price: [1111],
-        stock: 20,
-      }
-      ,{
-        gcode: "test3",
-        gname: "テスト",
-        price: [1300],
-        stock: 10,
-      }
-    ]
-  }
-];
-　constructor() { }
+  public goods: Goods[]=[];
+    //コンポーネント間通信用
+  public subject = new Subject<string>();
+  public observe = this.subject.asObservable();
+
+  constructor() { }
+
   resetGoods() : void { this.goods = new Array(); }
   getGoods(){ return this.goods; }
   addGoods(pgoods:Goods) : void {
@@ -73,5 +33,9 @@ export class GoodsService {
     }else{
 　　　　this.goods.push(pgoods);
     }
+  }
+  decreGoods(ctg:string,gds:string,j:number,dec:number) : void {
+　　let i:number = this.goods.findIndex(obj => obj.categ == ctg);
+　　this.goods[i].ginfo[j].stock +=dec;
   }
 }

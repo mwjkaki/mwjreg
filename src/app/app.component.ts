@@ -1,37 +1,32 @@
-import { Component } from '@angular/core';
-// import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Component,OnInit } from '@angular/core';
+import { AuthService } from './auth.service';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'samplemdb';
+export class AppComponent implements OnInit  {
+  title = 'Posレジアプリ';
   private routeLinks: any[];
-  // private activeLinkIndex = 0;
-  // private currentRoute = '';
 
-  constructor(
-    // private router: Router,
-    // private activatedRoute: ActivatedRoute
-  ) {
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches)
+    );
+    
+  constructor(private breakpointObserver: BreakpointObserver,private auth: AuthService) {
     this.routeLinks = [
-      { label: 'data', link: 'tab01' },
-      { label: 'regi', link: 'tab02' },
-      { label: 'Tab03', link: 'tab03' },
-      { label: 'Tab04', link: 'tab04' }
+      { label: 'Data', link: 'tab01', icon: 'dashboard' },
+      { label: 'Regi', link: 'tab02', icon: 'shopping_cart' },
+      { label: 'List', link: 'tab03', icon: 'list' },
+      { label: 'Expo', link: 'tab04', icon: 'save_alt' }
     ];
-    // router.events.subscribe(event => {
-    //   if (event instanceof NavigationEnd) {
-    //     this.currentRoute = event.url.slice(1);
-    //     console.log(this.currentRoute);
-    //     this.routeLinks.forEach((elm, index) => {
-    //       if (elm.link === this.currentRoute) {
-    //         this.activeLinkIndex = index;
-    //       }
-    //     });
-    //   }
-    // });
+  }
+  ngOnInit(): void {
+    this.auth.localAuthSetup();
   }
 }

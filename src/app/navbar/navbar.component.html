@@ -1,0 +1,22 @@
+<button mat-button [matMenuTriggerFor]="menu">
+  <span class="mat-body-2">{{displayUserName | userName}}</span>
+  <mat-icon>expand_more</mat-icon>
+  <mat-icon class="user-icon">supervised_user_circle</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button *ngIf="!auth.loggedIn" mat-menu-item (click)="auth.login()">
+    <mat-icon>supervisor_account</mat-icon>
+    <span>ログイン</span>
+  </button>
+  <button *ngIf="auth.loggedIn" mat-menu-item (click)="auth.logout()">
+    <mat-icon>exit_to_app</mat-icon>
+    <span>ログアウト</span>
+  </button>
+  <button mat-menu-item [matMenuTriggerFor]="colormenu">Color</button>
+    <mat-menu #colormenu="matMenu">
+      <button mat-menu-item (click)="setColor('indigo-pink')">indigo-pink</button>
+      <button mat-menu-item (click)="setColor('deeppurple-amber')">deeppurple-amber</button>
+      <button mat-menu-item (click)="setColor('pink-bluegrey')">pink-bluegrey</button>
+      <button mat-menu-item (click)="setColor('purple-green')">purple-green</button>
+    </mat-menu>
+</mat-menu>
